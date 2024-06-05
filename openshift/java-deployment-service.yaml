@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+spec:
+  selector:
+    matchLabels:
+      app: java-deployment
+  template:
+    metadata:
+      labels:
+        app: java-deployment
+    spec:
+      containers:
+      - name: java-app
+        image: osayman74/java-app:latest
+        ports:
+        - containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-deployment
+spec:
+  selector:
+    app: java-deployment
+  ports:
+  - port: 8082
+    targetPort: 8082
