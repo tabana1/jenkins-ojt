@@ -1,8 +1,7 @@
 @Library('java-shared-library@main') _
 pipeline {
 
-    //agent { label 'slave1' }
-    // agent any 
+    agent any 
 
     environment {
         dockerHubCredentialsID	    = 'DockerHub'  		    			// DockerHub credentials ID.
