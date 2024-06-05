@@ -35,7 +35,7 @@ pipeline {
                 	// Navigate to the directory contains Dockerfile
                  	dir('Jenkins') {
                         dir('app-master') {
-                 		    buildandPushDockerImage("${dockerHubCredentialsID}", "${imageName}")
+                 		    dockerBuildAndPush("${dockerHubCredentialsID}", "${imageName}")
                     }
                 }
             }
@@ -48,7 +48,7 @@ pipeline {
         		// Navigate to the directory contains Deployment and Service YAML files
                     dir('Jenkins'){
                         dir('openshift'){
-                            deployOnOpenShift("${openshiftcredintialsID}" , "${imageName}")
+                            openshiftDeploy("${openshiftcredintialsID}" , "${imageName}")
                         }
                     }
 
