@@ -7,7 +7,7 @@ pipeline {
         dockerHubCredentialsID	    = 'DockerHub'  		    			// DockerHub credentials ID.
         imageName   		    = 'tabana1/java-app'     			// DockerHub repo/image name.
         openshiftcredintialsID  = 'openshift'
-        OPENSHIFT_PROJECT = 'mohamedtabana'
+        OPENSHIFT_PROJECT = 'my-project'
     }
     
 
@@ -34,7 +34,7 @@ pipeline {
                 script {
                 	// Navigate to the directory contains Dockerfile
                  	dir('Jenkins') {
-                        dir('app-master') {
+                        dir('my-app') {
                  		    dockerBuildAndPush("${dockerHubCredentialsID}", "${imageName}")
                     }
                 }
