@@ -1,18 +1,15 @@
 @Library('java-shared-library') _
 pipeline {
+    agent any
 
-    agent {  }
-    
     environment {
-        dockerHubCredentialsID	    = 'docker'  		    			// DockerHub credentials ID.
-        imageName   		    = 'tabana1/static-website'     			// DockerHub repo/image name.
+        dockerHubCredentialsID = 'docker'
+        imageName = 'tabana1/static-website'
         OPENSHIFT_SERVER = 'https://api.ocp-training.ivolve-test.com:6443'
         GIT_REPO = 'https://github.com/IbrahimAdell/Lab.git'
-
         OPENSHIFT_PROJECT = 'my-devops-tools'
-       OPENSHIFT_TOKEN = credentials('open-shift-service')     
-}
-    
+        OPENSHIFT_CREDENTIALS_ID = 'open-shift-service'
+    }
 
     stages {
         stage('Clone Repository') {
@@ -21,41 +18,39 @@ pipeline {
             }
         }
 
-    stages {       
-
         stage('Test') {
             steps {
                 script {
-                	echo "Running Unit Test..."
-			sh 'chmod 744 gradlew'
-			sh './gradlew clean test'
-        	}
-    	    }
-	}
-	
-       
+                    echo "Running Unit Test..."
+                    sh 'chmod 744 gradlew'
+                    sh './gradlew clean test'
+                }
+            }
+        }
+
         stage('Build and Push Docker Image') {
             steps {
                 script {
                     buildAndPushDockerImage(
-                        dockerHubCredentialsID: "${env.DOCKER_HUB_CREDENTIALS_ID}",
-                        imageName: "${env.REGISTRY}/${env.IMAGE_NAME}"
+                        dockerHubCredentialsID: "${env.dockerHubCredentialsID}",
+                        imageName: "${env.imageName}"
                     )
                 }
             }
         }
-	    
+
         stage('Deploy to OpenShift') {
             steps {
                 script {
                     deployToOpenshift(
                         openshiftCredentialsID: "${env.OPENSHIFT_CREDENTIALS_ID}",
-                        imageName: "${env.REGISTRY}/${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                        imageName: "${env.imageName}:${env.BUILD_NUMBER}"
                     )
                 }
             }
         }
     }
+
     post {
         always {
             echo 'Pipeline execution completed'
