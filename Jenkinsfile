@@ -33,9 +33,9 @@ pipeline {
             steps {
                 script {
                     // Call another function from java-shared-library/vars
+                    dir('my-app'){
                     dockerBuildAndPush(
-                       dockerHubCredentialsID, imageName
-                    )
+                       dockerHubCredentialsID, imageName) }
                 }
             }
         }
