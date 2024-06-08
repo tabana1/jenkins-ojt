@@ -7,7 +7,7 @@ pipeline {
         dockerHubCredentialsID = 'docker'
         imageName = 'tabana1/static-website'
         OPENSHIFT_SERVER = 'https://api.ocp-training.ivolve-test.com:6443'
-        GIT_REPO = 'https://github.com/IbrahimAdell/Lab.git'
+        GIT_REPO = 'https://github.com/IbrahimAdell/Lab'
         OPENSHIFT_PROJECT = 'my-devops-tools'
         OPENSHIFT_CREDENTIALS_ID = 'open-shift-service'
     }
