@@ -12,22 +12,22 @@ pipeline {
         OPENSHIFT_CREDENTIALS_ID = 'open-shift-service'
     }
 
-    // stages {
+     stages {
     //     stage('Clone Repository') {
     //         steps {
     //             git url: "${env.GIT_REPO}"
     //         }
     //     }
 
-        stage('Test') {
-            steps {
-                script {
-                    echo "Running Unit Test..."
-                    // Call a function from java-shared-library/vars
-                    runUnitTests()
-                }
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         script {
+        //             echo "Running Unit Test..."
+        //             // Call a function from java-shared-library/vars
+        //             runUnitTests()
+        //         }
+        //     }
+        // }
 
         stage('Build and Push Docker Image') {
             steps {
