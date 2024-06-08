@@ -34,7 +34,7 @@ pipeline {
                 script {
                     // Call another function from java-shared-library/vars
                     dockerBuildAndPush(
-                       (dockerHubCredentialsID, imageName)
+                       dockerHubCredentialsID, imageName
                     )
                 }
             }
