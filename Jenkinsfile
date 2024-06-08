@@ -1,4 +1,4 @@
-@Library('java-shared-library@1.0') _
+@Library('java-shared-library') _
 
 pipeline {
     agent any
