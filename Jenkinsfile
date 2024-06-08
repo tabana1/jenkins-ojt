@@ -1,4 +1,4 @@
-@Library('https://github.com/tabana1/java-shared-library') _
+@Library('java-shared-library') _
 
 pipeline {
     agent any
