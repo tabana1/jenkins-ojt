@@ -7,10 +7,19 @@ pipeline {
         dockerHubCredentialsID	    = 'docker'  		    			// DockerHub credentials ID.
         imageName   		    = 'tabana1/static-website'     			// DockerHub repo/image name.
         OPENSHIFT_SERVER = 'https://api.ocp-training.ivolve-test.com:6443'
+        GIT_REPO = 'https://github.com/IbrahimAdell/Lab.git'
+
         OPENSHIFT_PROJECT = 'my-devops-tools'
-       OPENSHIFT_TOKEN = credentials('open-shift-service')     }
+       OPENSHIFT_TOKEN = credentials('open-shift-service')     
+}
     
 
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: "${env.GIT_REPO}"
+            }
+        }
 
     stages {       
 
@@ -25,50 +34,37 @@ pipeline {
 	}
 	
        
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
-        		echo "Building docker image ..."
-        		sh "docker build -t ${imageName}:${BUILD_NUMBER} ."
-                }
-            }
-        }
-
-       
-        stage('push Docker Image') {
-            steps {
-                script {
-        		echo "pushing docker image ..."
-			withCredentials([usernamePassword(credentialsId: "${dockerHubCredentialsID}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-				sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-        		}
-			sh "docker push ${imageName}:${BUILD_NUMBER}"
+                    buildAndPushDockerImage(
+                        dockerHubCredentialsID: "${env.DOCKER_HUB_CREDENTIALS_ID}",
+                        imageName: "${env.REGISTRY}/${env.IMAGE_NAME}"
+                    )
                 }
             }
         }
 	    
-	stage('Deploy on OpenShift cluster') {
+        stage('Deploy to OpenShift') {
             steps {
                 script {
-        		// Log in to the OpenShift cluster and deploy the image
-                    sh """
-                        oc login ${OPENSHIFT_SERVER} --token=${SERVICE_ACCOUNT_TOKEN}
-                        oc project ${OPENSHIFT_PROJECT}
-                        
-                        oc set image deployment/your-deployment-name your-container-name=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                    """
+                    deployToOpenshift(
+                        openshiftCredentialsID: "${env.OPENSHIFT_CREDENTIALS_ID}",
+                        imageName: "${env.REGISTRY}/${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    )
                 }
             }
         }
-
     }
-
     post {
+        always {
+            echo 'Pipeline execution completed'
+        }
         success {
-            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline succeeded"
+            echo 'Pipeline executed successfully'
         }
         failure {
-            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline failed"
+            echo 'Pipeline execution failed'
         }
     }
 }
