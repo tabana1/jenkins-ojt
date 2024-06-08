@@ -1,4 +1,5 @@
 @Library('java-shared-library') _
+
 pipeline {
     agent any
 
@@ -22,7 +23,8 @@ pipeline {
             steps {
                 script {
                     echo "Running Unit Test..."
-                 
+                    // Call a function from java-shared-library/vars
+                    runUnitTests()
                 }
             }
         }
@@ -30,9 +32,9 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    buildAndPushDockerImage(
-                        dockerHubCredentialsID: "${env.dockerHubCredentialsID}",
-                        imageName: "${env.imageName}"
+                    // Call another function from java-shared-library/vars
+                    dockerBuildAndPush(
+                       (dockerHubCredentialsID, imageName)
                     )
                 }
             }
@@ -41,10 +43,8 @@ pipeline {
         stage('Deploy to OpenShift') {
             steps {
                 script {
-                    deployToOpenshift(
-                        openshiftCredentialsID: "${env.OPENSHIFT_CREDENTIALS_ID}",
-                        imageName: "${env.imageName}:${env.BUILD_NUMBER}"
-                    )
+                    // Call another function from java-shared-library/vars
+                    openshiftDeploy(OPENSHIFT_CREDENTIALS_ID, imageName)
                 }
             }
         }
