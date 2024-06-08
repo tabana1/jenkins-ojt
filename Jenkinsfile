@@ -12,12 +12,12 @@ pipeline {
         OPENSHIFT_CREDENTIALS_ID = 'open-shift-service'
     }
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git url: "${env.GIT_REPO}"
-            }
-        }
+    // stages {
+    //     stage('Clone Repository') {
+    //         steps {
+    //             git url: "${env.GIT_REPO}"
+    //         }
+    //     }
 
         stage('Test') {
             steps {
