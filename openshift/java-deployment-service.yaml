@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: java-app
-        image: osayman74/java-app:latest
+        image: tabana1/static-website:latest
         ports:
         - containerPort: 8081
 ---
