@@ -24,7 +24,7 @@ RUN ./gradlew build --stacktrace
 FROM adoptopenjdk:11-jre-hotspot
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /my-app
 
 # Copy the JAR file from the build stage
 COPY --from=build /app/build/libs/demo-0.0.1-SNAPSHOT.jar app.jar
