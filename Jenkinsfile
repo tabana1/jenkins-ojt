@@ -44,7 +44,9 @@ pipeline {
             steps {
                 script {
                     // Call another function from java-shared-library/vars
+                    dir('openshift'){
                     openshiftDeploy(OPENSHIFT_CREDENTIALS_ID, imageName)
+                    }
                 }
             }
         }
